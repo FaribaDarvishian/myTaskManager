@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">My Task Manager</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create">create</string>
+    <string name="user_name">user_name</string>
+    <string name="number_of_tasks">number_of_tasks</string>
 </resources>
