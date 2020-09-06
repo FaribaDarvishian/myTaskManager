@@ -26,7 +26,7 @@ public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private String name;
     private int number;
-    private int counter;
+    private int counterRow;
 
     private TaskRepository mRepository;
 
@@ -135,12 +135,26 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
             Task task = mTasks.get(position);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 
                 if (position % 2 == 0) {
                     holder.mRootLayout.setBackgroundColor(Color.parseColor("#FFC5E85F"));
                 } else {
                     holder.mRootLayout.setBackgroundColor(Color.parseColor("#FF58CFE1"));
                 }
+            }
+            else{
+                if (counterRow == 4)
+                    counterRow = 0;
+                if (counterRow == 0 || counterRow == 3) {
+                    holder.mRootLayout.setBackgroundColor(Color.parseColor("#FFC5E85F"));
+                    counterRow++;
+                } else {
+                    holder.mRootLayout.setBackgroundColor(Color.parseColor("#FF58CFE1"));
+                    counterRow++;
+                }
+
+            }
 
             holder.bindTask(task);
         }
