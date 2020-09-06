@@ -1,5 +1,6 @@
 package com.example.mytaskmanager.controller.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,12 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.example.mytaskmanager.R;
+import com.example.mytaskmanager.controller.activity.TaskListActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class TaskDetailFragment extends Fragment {
+    public static final String EXTRA_USER_NAME = "com.example.mytaskmanager.User_Name";
+    public static final String EXTRA_NUMBER_OF_TASKS = "com.example.mytaskmanager.number_of_task";
 
     private TextInputLayout mEditTextUserName;
     private TextInputLayout mEditTextNumber;
@@ -67,12 +71,20 @@ public class TaskDetailFragment extends Fragment {
 
                 else
                     {
-                    mEditTextUserName.setErrorEnabled(false);
-                    mEditTextNumber.setErrorEnabled(false);
+                        mEditTextUserName.setErrorEnabled(false);
+                        mEditTextNumber.setErrorEnabled(false);
 
-                   //ToDo we should StartActivity whit Intent
+                        Intent intent = new Intent(getActivity(), TaskListActivity.class);
+
+                        intent.putExtra(EXTRA_USER_NAME,
+                                mEditTextUserName.getEditText().getText().toString());
+                        intent.putExtra(EXTRA_NUMBER_OF_TASKS,
+                                Integer.parseInt(mEditTextNumber.getEditText().getText().toString()));
+
+                        startActivity(intent);
+                    }
                 }
-            }
+
         });
     }
 }

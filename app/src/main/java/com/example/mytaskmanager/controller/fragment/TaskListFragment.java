@@ -1,56 +1,148 @@
 package com.example.mytaskmanager.controller.fragment;
 
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytaskmanager.R;
+import com.example.mytaskmanager.model.Task;
+import com.example.mytaskmanager.repository.TaskRepository;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TaskListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
 public class TaskListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView mRecyclerView;
+    private String name;
+    private int number;
+    private int counter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TaskRepository mRepository;
 
     public TaskListFragment() {
         // Required empty public constructor
     }
 
-    public static TaskListFragment newInstance(String param1, String param2) {
-        TaskListFragment fragment = new TaskListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        mRepository = TaskRepository.getInstance();
+
+        name = getActivity().getIntent().
+                getStringExtra(TaskDetailFragment.EXTRA_USER_NAME);
+        number = (int) getActivity().getIntent().
+                getIntExtra(TaskDetailFragment.EXTRA_NUMBER_OF_TASKS, 0);
+
+        mRepository.setDetail(name, number);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
+
+        findViews(view);
+        initViews();
+        setListeners();
+        return view;
+    }
+
+
+    private void findViews(View view) {
+        mRecyclerView = view.findViewById(R.id.recycler_view_task_list);
+    }
+
+    private void initViews() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        else
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+        final TaskAdapter taskAdapter = new TaskAdapter(mRepository.getTasks());
+        mRecyclerView.setAdapter(taskAdapter);
+    }
+
+    private void setListeners() {
+
+    }
+
+    public class TaskHolder extends RecyclerView.ViewHolder {
+
+        private TextView mTextViewUsername;
+        private TextView mTextViewState;
+        private RelativeLayout mRootLayout;
+
+        private Task mTask;
+
+        public TaskHolder(@NonNull View itemView) {
+            super(itemView);
+            mTextViewUsername = itemView.findViewById(R.id.row_item_user_name);
+            mTextViewState = itemView.findViewById(R.id.row_item_number);
+            mRootLayout = itemView.findViewById(R.id.row_root_layout);
+        }
+
+        public void bindTask(Task task) {
+            mTask = task;
+
+            mTextViewUsername.setText(task.getName());
+            mTextViewState.setText(task.getState().toString());
+        }
+    }
+
+    public class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
+
+        private List<Task> mTasks;
+
+        public List<Task> getTasks() {
+            return mTasks;
+        }
+
+        public void setTasks(List<Task> tasks) {
+            mTasks = tasks;
+        }
+
+        public TaskAdapter(List<Task> tasks) {
+            mTasks = tasks;
+        }
+
+        @Override
+        public int getItemCount() {
+            return mTasks.size();
+        }
+
+        @NonNull
+        @Override
+        public TaskHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.
+                    from(getActivity()).
+                    inflate(R.layout.task_row_list, parent, false);
+            TaskHolder taskHolder = new TaskHolder(view);
+            return taskHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
+            Task task = mTasks.get(position);
+
+                if (position % 2 == 0) {
+                    holder.mRootLayout.setBackgroundColor(Color.parseColor("#FFC5E85F"));
+                } else {
+                    holder.mRootLayout.setBackgroundColor(Color.parseColor("#FF58CFE1"));
+                }
+
+            holder.bindTask(task);
+        }
     }
 }

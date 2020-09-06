@@ -22,5 +22,19 @@ public class TaskRepository {
     private TaskRepository() {
         mTasks = new ArrayList<>();
     }
+    public void setDetail(String userName , int number){
+        mUserName = userName;
+        mNumber = number;
 
+        for (int i = 0; i < mNumber; i++) {
+            Task task = new Task();
+            task.setName(mUserName);
+
+            mTasks.add(task);
+        }
+    }
+
+    public List<Task> getTasks() {
+        return mTasks;
+    }
 }

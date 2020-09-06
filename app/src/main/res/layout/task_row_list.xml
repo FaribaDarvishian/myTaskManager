@@ -44,7 +44,7 @@
         android:layout_marginBottom="5dp"
         android:gravity="center"
         android:padding="10dp"
-        android:textColor="#39393C"
+        android:textColor="#373839"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="state" />
