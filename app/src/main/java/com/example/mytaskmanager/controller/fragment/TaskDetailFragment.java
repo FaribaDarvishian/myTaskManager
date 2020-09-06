@@ -1,4 +1,4 @@
-package com.example.mytaskmanager.Controller.Fragment;
+package com.example.mytaskmanager.controller.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -55,13 +55,14 @@ public class TaskDetailFragment extends Fragment {
                 if(mEditTextUserName.getEditText().getText().toString().trim().isEmpty()) {
                     mEditTextUserName.setErrorEnabled(true);
                     mEditTextUserName.setError("Complete Field");
-
                 }
-                if(mEditTextNumber.getEditText().getText().toString().length() == 0) {
+
+                else if(mEditTextNumber.getEditText().getText().toString().length() == 0) {
                     mEditTextUserName.setErrorEnabled(false);
                     mEditTextNumber.setErrorEnabled(true);
                     mEditTextNumber.setError("Complete Field");
                 }
+
 
 
                 else
