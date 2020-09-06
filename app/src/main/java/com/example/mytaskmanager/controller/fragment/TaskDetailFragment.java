@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.mytaskmanager.R;
@@ -16,6 +17,8 @@ import com.google.android.material.textfield.TextInputLayout;
 public class TaskDetailFragment extends Fragment {
     public static final String EXTRA_USER_NAME = "com.example.mytaskmanager.User_Name";
     public static final String EXTRA_NUMBER_OF_TASKS = "com.example.mytaskmanager.number_of_task";
+    public static final String KEY_USER_NAME = "username";
+    public static final String KEY_NUMBER_OF_TASK = "numberOfTask";
 
     private TextInputLayout mEditTextUserName;
     private TextInputLayout mEditTextNumber;
@@ -38,7 +41,19 @@ public class TaskDetailFragment extends Fragment {
         findViews(view);
         initViews();
         setListeners();
+        if(savedInstanceState != null){
+            mEditTextUserName.getEditText().setText(savedInstanceState.getString(KEY_USER_NAME));
+            mEditTextNumber.getEditText().setText(savedInstanceState.getString(KEY_NUMBER_OF_TASK));
+        }
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(KEY_USER_NAME, mEditTextUserName.getEditText().getText().toString());
+        outState.putString(KEY_NUMBER_OF_TASK, mEditTextNumber.getEditText().getText().toString());
     }
 
     private void findViews(View view) {
