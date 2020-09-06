@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class TaskListFragment extends Fragment {
     private int counterRow;
 
     private TaskRepository mRepository;
+    private Button mButtonAddTask;
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -62,6 +64,7 @@ public class TaskListFragment extends Fragment {
 
     private void findViews(View view) {
         mRecyclerView = view.findViewById(R.id.recycler_view_task_list);
+        mButtonAddTask = view.findViewById(R.id.btn_add);
     }
 
     private void initViews() {
@@ -72,6 +75,16 @@ public class TaskListFragment extends Fragment {
 
         final TaskAdapter taskAdapter = new TaskAdapter(mRepository.getTasks());
         mRecyclerView.setAdapter(taskAdapter);
+        mButtonAddTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Task task = new Task();
+                task.setName(name);
+                mRepository.getTasks().add(task);
+                taskAdapter.notifyItemInserted(++number);
+
+            }
+        });
     }
 
     private void setListeners() {
